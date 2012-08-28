@@ -17,7 +17,7 @@ public class Percolation {
 	// intitate quick find wihtout virutal top and bottom to prevent bckwash
 	private WeightedQuickUnionUF objFind2;
 	// store local vairable to capture grid size
-	private int NMax;
+	private int Nmax;
 
 	/*---------------------------------------------------------
 	 *This is a constructor that takes in gride size and constructs an array of size N*N
@@ -43,7 +43,7 @@ public class Percolation {
 		for (int i = N * N; i > N * N - N; i--) {
 			objFind.union(i, N * N + 1);
 		}
-		NMax = N;
+		Nmax = N;
 	}
 
 	/*---------------------------------------------------------
@@ -52,13 +52,13 @@ public class Percolation {
 	 *will check the sourding cells to see if then are 
 	 * ---------------------------------------------------------*/
 	public void open(int i, int j) {
-		if (i <= 0 || i > NMax)
+		if (i <= 0 || i > Nmax)
 			throw new IndexOutOfBoundsException("row index i out of bounds");
-		if (j <= 0 || j > NMax)
+		if (j <= 0 || j > Nmax)
 			throw new IndexOutOfBoundsException("row index j out of bounds");
 
 		// set value of indexs
-		id[NMax * (i - 1) + j] = true;
+		id[Nmax * (i - 1) + j] = true;
 		shouldJoin(i - 1, j, i, j);
 		shouldJoin(i + 1, j, i, j);
 		shouldJoin(i, j - 1, i, j);
@@ -71,7 +71,7 @@ public class Percolation {
 	 * returns the array where grid is open or closed is checked
 	 * ---------------------------------------------------------*/
 	public boolean isOpen(int i, int j) {
-		return id[NMax * (i - 1) + j];
+		return id[Nmax * (i - 1) + j];
 	}
 
 	/*---------------------------------------------------------
@@ -82,10 +82,10 @@ public class Percolation {
 	public boolean isFull(int i, int j) {
 		if (!isOpen(i, j))
 			return false;
-		// return objFind.connected(0,NMax*(i-1)+j);
+		// return objFind.connected(0,Nmax*(i-1)+j);
 		boolean isConnected = false;
-		for (int i1 = 0; i1 < NMax; i1++) {
-			isConnected = objFind2.connected(i1, NMax * (i - 1) + j - 1);
+		for (int i1 = 0; i1 < Nmax; i1++) {
+			isConnected = objFind2.connected(i1, Nmax * (i - 1) + j - 1);
 			if (isConnected)
 				break;
 		}
@@ -97,7 +97,7 @@ public class Percolation {
 	 *it uses the first object, with virutal top and bottom to see if they are connected
 	 * ---------------------------------------------------------*/
 	public boolean percolates() {
-		return objFind.connected(0, NMax * NMax + 1);
+		return objFind.connected(0, Nmax * Nmax + 1);
 	}
 
 	/*---------------------------------------------------------
@@ -105,13 +105,13 @@ public class Percolation {
 	 *if they can be joined, then the join from two object instance is called
 	 * ---------------------------------------------------------*/
 	private void shouldJoin(int l, int m, int x, int y) {
-		if (l <= 0 || l > NMax)
+		if (l <= 0 || l > Nmax)
 			return;
-		if (m <= 0 || m > NMax)
+		if (m <= 0 || m > Nmax)
 			return;
 
-		int lm = NMax * (l - 1) + m;
-		int xy = NMax * (x - 1) + y;
+		int lm = Nmax * (l - 1) + m;
+		int xy = Nmax * (x - 1) + y;
 
 		if (isOpen(l, m)) {
 			objFind.union(lm, xy);
