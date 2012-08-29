@@ -34,12 +34,13 @@ public class Percolation {
         }
         // we are using +2 because we want to use virtual top and bottom
         objFind = new WeightedQuickUnionUF(n * n + 2);
-        objFind2 = new WeightedQuickUnionUF(n * n);
+        objFind2 = new WeightedQuickUnionUF(n * n + 1);
 
         nMax = n;
 
         for (int i1 = 1; i1 <= nMax; i1++) {
             objFind.union(0, i1);
+            objFind2.union(0, i1);
         }
         for (int i1 = nMax * nMax; i1 > nMax * nMax - nMax; i1--) {
             objFind.union(i1, nMax * nMax + 1);
@@ -95,14 +96,9 @@ public class Percolation {
             throw new IndexOutOfBoundsException("row index j out of bounds");
         if (!isOpen(i, j))
             return false;
-        // return objFind.connected(0,nMax*(i-1)+j);
-        boolean isConnected = false;
-        for (int i1 = 0; i1 < nMax; i1++) {
-            isConnected = objFind2.connected(i1, nMax * (i - 1) + j - 1);
-            if (isConnected)
-                break;
-        }
-        return isConnected;
+
+        return objFind2.connected(0, nMax * (i - 1) + j);
+
     }
 
     /*---------------------------------------------------------
@@ -131,7 +127,7 @@ public class Percolation {
 
         if (isOpen(l, m)) {
             objFind.union(lm, xy);
-            objFind2.union(lm - 1, xy - 1);
+            objFind2.union(lm, xy);
         }
         return true;
 

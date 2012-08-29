@@ -71,28 +71,29 @@ public class PercolationStats {
     public static void main(String[] args) // test client, described below
     {
 
-        int size = Integer.parseInt(args[0]);
-        int times = Integer.parseInt(args[1]);
-        Stopwatch s = new Stopwatch();
-        PercolationStats x = new PercolationStats(size, times);
-        double time = s.elapsedTime();
+        // int size = Integer.parseInt(args[0]);
+        // int times = Integer.parseInt(args[1]);
+        // Stopwatch s = new Stopwatch();
+        // PercolationStats x = new PercolationStats(size, times);
+        // double time = s.elapsedTime();
+        //
+        // double mu = x.mean();
+        // double sigma = x.stddev();
+        // double confminus = mu - ((1.96 * sigma) / Math.sqrt(size));
+        // double confplus = mu + ((1.96 * sigma) / Math.sqrt(times));
+        //
+        // StdOut.println(time);
+        // StdOut.println(mu);
+        // StdOut.println(sigma);
+        // StdOut.print(Double.toString(confminus));
+        // StdOut.print(", ");
+        // StdOut.println(Double.toString(confplus));
 
-        double mu = x.mean();
-        double sigma = x.stddev();
-        double confminus = mu - ((1.96 * sigma) / Math.sqrt(size));
-        double confplus = mu + ((1.96 * sigma) / Math.sqrt(times));
-
-        StdOut.println(time);
-        StdOut.println(mu);
-        StdOut.println(sigma);
-        StdOut.print(Double.toString(confminus));
-        StdOut.print(", ");
-        StdOut.println(Double.toString(confplus));
-
-        // Percolation x = new Percolation(1);
-        // boolean y = x.percolates();
-        // x.open(1, 1);
-        // y = x.percolates();
+        Percolation x = new Percolation(3);
+        boolean y = x.percolates();
+        x.open(1, 3);
+        x.open(2, 3);
+        y = x.isFull(2, 3);
 
     }
 }
