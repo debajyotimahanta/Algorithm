@@ -19,6 +19,8 @@ public class Percolation {
 	// store local variable to capture grid size
 	private int Nmax;
 
+	private boolean isFirstJoinCalled = false;
+
 	/*---------------------------------------------------------
 	 *This is a constructor that takes in gride size and constructs an array of size N*N
 	 * ---------------------------------------------------------*/
@@ -36,13 +38,6 @@ public class Percolation {
 		objFind = new WeightedQuickUnionUF(N * N + 2);
 		objFind2 = new WeightedQuickUnionUF(N * N);
 
-		// Initiate and connect virtual top and bottom
-		for (int i = 1; i <= N; i++) {
-			objFind.union(0, i);
-		}
-		for (int i = N * N; i > N * N - N; i--) {
-			objFind.union(i, N * N + 1);
-		}
 		Nmax = N;
 	}
 
@@ -59,11 +54,22 @@ public class Percolation {
 
 		// set value of indexs
 		id[Nmax * (i - 1) + j] = true;
-		shouldJoin(i - 1, j, i, j);
-		shouldJoin(i + 1, j, i, j);
-		shouldJoin(i, j - 1, i, j);
-		shouldJoin(i, j + 1, i, j);
+		boolean isJoinSuccess = false;
+		isJoinSuccess = shouldJoin(i - 1, j, i, j);
+		isJoinSuccess = shouldJoin(i + 1, j, i, j);
+		isJoinSuccess = shouldJoin(i, j - 1, i, j);
+		isJoinSuccess = shouldJoin(i, j + 1, i, j);
 
+		if (isJoinSuccess && !isFirstJoinCalled) {
+			// Initiate and connect virtual top and bottom
+			for (int i1 = 1; i1 <= Nmax; i1++) {
+				objFind.union(0, i1);
+			}
+			for (int i1 = Nmax * Nmax; i1 > Nmax * Nmax - Nmax; i1--) {
+				objFind.union(i1, Nmax * Nmax + 1);
+			}
+			isFirstJoinCalled = true;
+		}
 	}
 
 	/*---------------------------------------------------------
@@ -71,6 +77,10 @@ public class Percolation {
 	 * returns the array where grid is open or closed is checked
 	 * ---------------------------------------------------------*/
 	public boolean isOpen(int i, int j) {
+		if (i <= 0 || i > Nmax)
+			throw new IndexOutOfBoundsException("row index i out of bounds");
+		if (j <= 0 || j > Nmax)
+			throw new IndexOutOfBoundsException("row index j out of bounds");
 		return id[Nmax * (i - 1) + j];
 	}
 
@@ -80,6 +90,10 @@ public class Percolation {
 	 *it checks with all the elements in the top row
 	 * ---------------------------------------------------------*/
 	public boolean isFull(int i, int j) {
+		if (i <= 0 || i > Nmax)
+			throw new IndexOutOfBoundsException("row index i out of bounds");
+		if (j <= 0 || j > Nmax)
+			throw new IndexOutOfBoundsException("row index j out of bounds");
 		if (!isOpen(i, j))
 			return false;
 		// return objFind.connected(0,Nmax*(i-1)+j);
@@ -104,11 +118,11 @@ public class Percolation {
 	 *this is a private method that will first check if the two joins can be joined
 	 *if they can be joined, then the join from two object instance is called
 	 * ---------------------------------------------------------*/
-	private void shouldJoin(int l, int m, int x, int y) {
+	private boolean shouldJoin(int l, int m, int x, int y) {
 		if (l <= 0 || l > Nmax)
-			return;
+			return false;
 		if (m <= 0 || m > Nmax)
-			return;
+			return false;
 
 		int lm = Nmax * (l - 1) + m;
 		int xy = Nmax * (x - 1) + y;
@@ -117,6 +131,7 @@ public class Percolation {
 			objFind.union(lm, xy);
 			objFind2.union(lm - 1, xy - 1);
 		}
+		return true;
 
 	}
 }
