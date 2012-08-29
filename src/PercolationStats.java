@@ -3,71 +3,84 @@
  * login: debajyoti.mahanta@gmail.com
  * date: Aug-27th 2012
  * This program is used to test weather a grid percolates or not using
- *- Creates an N-by-N grid of sites (intially all blocked)
+ *- Creates an N-by-N grid of sites (initially all blocked)
  *- Reads in a sequence of sites (row i, column j) to open.
  * ---------------------------------------------------------*/
 
 public class PercolationStats {
-
-	// this variable is used to create a percolation instance
-	private Percolation _percolation;
+	private Percolation objPercolation;
 	// variable to hold number of times to computer
-	private double _numberofCompute;
+	private double numberofCompute;
 	// number of times it took before it percolated
 	private double[] timestoPercolate;
 
 	// perform T independent computational experiments on an N-by-N grid
-	public PercolationStats(int N, int T) {
-		if (N <= 0)
-			throw new IllegalArgumentException("N cannot be zero");
-		if (T <= 0)
-			throw new IllegalArgumentException("T cannot be zero");
+
+	/*---------------------------------------------------------
+	 * This is the constructed that takes
+	 * the grid size Gridsize and number of time to compute as Times
+	 * It throws exception if any of them is less then 0
+	 * It sets the private variable
+	 * it looks through top array and check if they are connected.
+	 * ---------------------------------------------------------*/
+	public PercolationStats(final int gridSize, final int times) {
+		if (gridSize <= 0)
+			throw new IllegalArgumentException("Gridsize cannot be zero");
+		if (times <= 0)
+			throw new IllegalArgumentException("Times cannot be zero");
 		int x;
 		int y;
-		_numberofCompute = T;
-		timestoPercolate = new double[T];
-		for (int i = 0; i < _numberofCompute; i++) {
-			_percolation = new Percolation(N);
+		numberofCompute = times;
+		timestoPercolate = new double[times];
+		for (int i = 0; i < numberofCompute; i++) {
+			objPercolation = new Percolation(gridSize);
 			int count = 0;
-			while (!_percolation.percolates()) {
-				x = StdRandom.uniform(1, N + 1);
-				y = StdRandom.uniform(1, N + 1);
-				if (!_percolation.isOpen(x, y)) {
-					_percolation.open(x, y);
+			while (!objPercolation.percolates()) {
+				x = StdRandom.uniform(1, gridSize + 1);
+				y = StdRandom.uniform(1, gridSize + 1);
+				if (!objPercolation.isOpen(x, y)) {
+					objPercolation.open(x, y);
 					count++;
 
 				}
 
 			}
-			double d = (double) count / (double) (N * N);
+			double d = (double) count / (double) (gridSize * gridSize);
 			timestoPercolate[i] = d;
 		}
 
 	}
 
-	public double mean() // sample mean of percolation threshold
-	{
+	/*---------------------------------------------------------
+	 * Get the mean of all the percolation threshold
+	 * ---------------------------------------------------------*/
+	public double mean() {
 		return StdStats.mean(timestoPercolate);
 	}
 
-	// sample standard deviation of percolation threshold
+	/*---------------------------------------------------------
+	 *  sample standard deviation of percolation threshold
+	 * ---------------------------------------------------------*/
 	public double stddev() {
 		return StdStats.stddev(timestoPercolate);
 	}
 
+	/*---------------------------------------------------------
+	 *  the main method used for testing via command line
+	 * ---------------------------------------------------------*/
 	public static void main(String[] args) // test client, described below
 	{
 
-		int N = Integer.parseInt(args[0]);
-		int T = Integer.parseInt(args[1]);
+		int size = Integer.parseInt(args[0]);
+		int times = Integer.parseInt(args[1]);
 		Stopwatch s = new Stopwatch();
-		PercolationStats x = new PercolationStats(N, T);
+		PercolationStats x = new PercolationStats(size, times);
 		double time = s.elapsedTime();
 
 		double mu = x.mean();
 		double sigma = x.stddev();
-		double confminus = mu - ((1.96 * sigma) / Math.sqrt(N));
-		double confplus = mu + ((1.96 * sigma) / Math.sqrt(N));
+		double confminus = mu - ((1.96 * sigma) / Math.sqrt(size));
+		double confplus = mu + ((1.96 * sigma) / Math.sqrt(times));
 
 		StdOut.println(time);
 		StdOut.println(mu);

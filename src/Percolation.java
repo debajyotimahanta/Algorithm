@@ -4,7 +4,7 @@
  * date: Aug-27th 2012
  * This program is used to test weather a grid percolates or not using
  *  	- the grid size N of the percolation system.
- *    	- Creates an N-by-N grid of sites (intially all blocked)
+ *    	- Creates an N-by-N grid of sites (initially all blocked)
  *    	- Reads in a sequence of sites (row i, column j) to open.
  * ---------------------------------------------------------*/
 
@@ -14,9 +14,9 @@ public class Percolation {
 
 	// initiate quickfind using virtual top and bottom
 	private WeightedQuickUnionUF objFind;
-	// intitate quick find wihtout virutal top and bottom to prevent bckwash
+	// Intimate quick find without virtual top and bottom to prevent bckwash
 	private WeightedQuickUnionUF objFind2;
-	// store local vairable to capture grid size
+	// store local variable to capture grid size
 	private int Nmax;
 
 	/*---------------------------------------------------------
